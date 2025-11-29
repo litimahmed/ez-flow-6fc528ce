@@ -39,7 +39,7 @@ export function AppSidebar() {
       <SidebarContent className="bg-card">
         {/* Logo Section */}
         <div className={`${open ? "p-6" : "p-4"} transition-all duration-300`}>
-          <div className="flex items-center gap-3">
+          <div className={`flex items-center ${open ? "gap-3" : "justify-center"}`}>
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
               <div className="relative bg-gradient-to-br from-primary to-primary-glow p-2.5 rounded-xl shadow-lg">
