@@ -1,6 +1,8 @@
-import { Bell, Menu } from "lucide-react";
+import { Bell, Menu, Search, HelpCircle, Settings, LogOut, User, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { Input } from "@/components/ui/input";
+import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -20,40 +22,105 @@ export function DashboardHeader() {
   };
 
   return (
-    <header className="h-16 border-b border-primary-glow/20 bg-primary flex items-center justify-between px-6">
-      <div className="flex items-center gap-4">
-        <SidebarTrigger className="text-primary-foreground hover:bg-primary-glow/20">
+    <header className="h-20 border-b border-border/50 bg-card/95 backdrop-blur-xl flex items-center justify-between px-8 sticky top-0 z-50 shadow-sm">
+      <div className="flex items-center gap-6">
+        <SidebarTrigger className="text-foreground hover:bg-muted/50 p-2.5 rounded-xl transition-all duration-200 hover:scale-105">
           <Menu className="h-5 w-5" />
         </SidebarTrigger>
-        <h1 className="text-xl font-semibold text-primary-foreground">Toorrii Admin</h1>
+        
+        {/* Search Bar */}
+        <div className="relative hidden md:block">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            placeholder="Search queues, customers..."
+            className="w-80 pl-10 h-11 bg-muted/30 border-border/50 rounded-xl focus:bg-background transition-colors"
+          />
+        </div>
       </div>
 
-      <div className="flex items-center gap-4">
-        <Button variant="ghost" size="icon" className="text-primary-foreground hover:bg-primary-glow/20">
-          <Bell className="h-5 w-5" />
+      <div className="flex items-center gap-3">
+        {/* Help Button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-xl transition-all duration-200 relative group"
+        >
+          <HelpCircle className="h-5 w-5" />
+          <span className="absolute -top-1 -right-1 w-2 h-2 bg-primary rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
         </Button>
 
+        {/* Notifications Button */}
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className="text-muted-foreground hover:text-foreground hover:bg-muted/50 rounded-xl transition-all duration-200 relative"
+        >
+          <Bell className="h-5 w-5" />
+          <Badge 
+            variant="destructive" 
+            className="absolute -top-1 -right-1 h-5 w-5 flex items-center justify-center p-0 text-[10px] font-bold"
+          >
+            3
+          </Badge>
+        </Button>
+
+        <div className="w-px h-8 bg-border/50 mx-2" />
+
+        {/* User Menu */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-              <Avatar className="h-10 w-10">
-                <AvatarImage src="" alt="Admin" />
-                <AvatarFallback className="bg-primary-glow text-primary-foreground">AD</AvatarFallback>
-              </Avatar>
+            <Button 
+              variant="ghost" 
+              className="flex items-center gap-3 h-12 px-3 rounded-xl hover:bg-muted/50 transition-all duration-200 group"
+            >
+              <div className="relative">
+                <Avatar className="h-9 w-9 ring-2 ring-border/50 group-hover:ring-primary/30 transition-all">
+                  <AvatarImage src="" alt="Admin" />
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary-glow text-primary-foreground font-semibold text-sm">
+                    AD
+                  </AvatarFallback>
+                </Avatar>
+                <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-success border-2 border-card rounded-full" />
+              </div>
+              <div className="hidden lg:flex flex-col items-start">
+                <span className="text-sm font-semibold text-foreground">Admin User</span>
+                <span className="text-xs text-muted-foreground">Super Admin</span>
+              </div>
             </Button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-56" align="end" forceMount>
-            <DropdownMenuLabel className="font-normal">
-              <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Admin User</p>
-                <p className="text-xs leading-none text-muted-foreground">admin@toorrii.com</p>
+          <DropdownMenuContent className="w-64" align="end" forceMount>
+            <DropdownMenuLabel className="font-normal p-4">
+              <div className="flex items-center gap-3">
+                <Avatar className="h-12 w-12 ring-2 ring-primary/20">
+                  <AvatarImage src="" alt="Admin" />
+                  <AvatarFallback className="bg-gradient-to-br from-primary to-primary-glow text-primary-foreground font-bold">
+                    AD
+                  </AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col space-y-1">
+                  <p className="text-sm font-semibold leading-none">Admin User</p>
+                  <p className="text-xs leading-none text-muted-foreground">admin@toorrii.com</p>
+                  <Badge variant="secondary" className="w-fit mt-1 text-[10px] py-0 h-5">
+                    <Shield className="h-3 w-3 mr-1" />
+                    Super Admin
+                  </Badge>
+                </div>
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Settings</DropdownMenuItem>
+            <DropdownMenuItem className="py-2.5 cursor-pointer">
+              <User className="mr-3 h-4 w-4" />
+              <span className="font-medium">Profile</span>
+            </DropdownMenuItem>
+            <DropdownMenuItem className="py-2.5 cursor-pointer">
+              <Settings className="mr-3 h-4 w-4" />
+              <span className="font-medium">Settings</span>
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout} className="py-2.5 cursor-pointer text-destructive focus:text-destructive">
+              <LogOut className="mr-3 h-4 w-4" />
+              <span className="font-medium">Log out</span>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
