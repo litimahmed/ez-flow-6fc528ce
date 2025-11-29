@@ -17,10 +17,24 @@ export const useLogin = () => {
       const data = await loginAdmin(payload);
       // Here you would typically save the access/refresh tokens
       // e.g., localStorage.setItem('accessToken', data.access);
-      toast({ title: "Success", description: "Welcome back!" });
+      toast({ title: "Success", description: "Welcome back!", variant: "success" });
       navigate("/");
     } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : "Login failed. Please try again.";
+      let errorMessage = "Login failed. Please try again.";
+      
+      if (err instanceof Error) {
+        const message = err.message.toLowerCase();
+        if (message.includes("deactivated") || message.includes("disabled")) {
+          errorMessage = "Your account has been deactivated. Please contact support.";
+        } else if (message.includes("invalid") || message.includes("incorrect") || message.includes("wrong")) {
+          errorMessage = "Invalid email or password. Please check your credentials.";
+        } else if (message.includes("not found") || message.includes("no user") || message.includes("doesn't exist")) {
+          errorMessage = "No account found with this email. Please sign up first.";
+        } else {
+          errorMessage = err.message;
+        }
+      }
+      
       setError(errorMessage);
       toast({ title: "Error", description: errorMessage, variant: "destructive" });
     } finally {
