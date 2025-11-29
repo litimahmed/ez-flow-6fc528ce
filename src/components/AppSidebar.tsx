@@ -36,7 +36,7 @@ export function AppSidebar() {
             <div className="relative">
               <div className="absolute inset-0 bg-primary/20 blur-xl rounded-full" />
               <div className="relative bg-gradient-to-br from-primary to-primary-glow p-1 rounded-xl shadow-lg">
-                <Zap className="h-3 w-3 text-primary-foreground" />
+                <Zap className="h-5 w-5 text-primary-foreground" />
               </div>
             </div>
             {open && <div className="flex flex-col animate-fade-in">
