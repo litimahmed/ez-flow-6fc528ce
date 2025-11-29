@@ -1,19 +1,33 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Loader2 } from "lucide-react";
+import { Loader2, Eye, EyeOff, Globe } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "@/components/ui/separator";
 import { useLogin } from "@/hooks/useLogin";
 import loginGradient from "@/assets/login-gradient-teal.jpg";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+const languages = [
+  { code: "en", label: "English" },
+  { code: "fr", label: "Français" },
+  { code: "es", label: "Español" },
+  { code: "de", label: "Deutsch" },
+  { code: "ar", label: "العربية" },
+];
 
 const Login = () => {
   const { toast } = useToast();
   const { login, isLoading } = useLogin();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("en");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -23,12 +37,39 @@ const Login = () => {
     }
     await login({ email, password });
   };
-  return <div className="min-h-screen flex items-center justify-center relative overflow-hidden p-4 md:p-8" style={{ background: 'var(--gradient-background)' }}>
+
+  const currentLanguage = languages.find(l => l.code === selectedLanguage);
+
+  return (
+    <div className="min-h-screen flex items-center justify-center relative overflow-hidden p-4 md:p-8" style={{ background: 'var(--gradient-background)' }}>
+      {/* Language Switcher */}
+      <div className="absolute top-6 right-6 z-20">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" size="sm" className="gap-2 bg-card/50 backdrop-blur-sm border border-border/50 hover:bg-card/80">
+              <Globe className="w-4 h-4" />
+              <span className="text-sm">{currentLanguage?.label}</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="min-w-[140px]">
+            {languages.map((lang) => (
+              <DropdownMenuItem
+                key={lang.code}
+                onClick={() => setSelectedLanguage(lang.code)}
+                className={selectedLanguage === lang.code ? "bg-primary/10 text-primary" : ""}
+              >
+                {lang.label}
+              </DropdownMenuItem>
+            ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
       {/* Animated background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute -top-40 -right-40 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '4s' }}></div>
         <div className="absolute -bottom-40 -left-40 w-96 h-96 bg-accent/10 rounded-full blur-3xl animate-pulse" style={{ animationDuration: '6s', animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px]  rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full blur-3xl animate-pulse" style={{ animationDuration: '8s' }}></div>
       </div>
       
       <div className="w-full max-w-6xl bg-card/80 backdrop-blur-xl rounded-3xl overflow-hidden relative z-10 animate-scale-in" style={{ boxShadow: 'var(--shadow-strong)' }}>
@@ -47,8 +88,8 @@ const Login = () => {
                 <h1 className="text-5xl text-primary mb-4 font-extrabold tracking-tight">
                   Toorrii
                 </h1>
-                <p className="text-lg text-muted-foreground">
-                  Queue Management Dashboard
+                <p className="text-base text-muted-foreground">
+                  Queue & Reservation Hub
                 </p>
               </div>
 
@@ -73,30 +114,28 @@ const Login = () => {
                   <label htmlFor="password" className="block text-sm font-medium text-foreground/70 mb-2 transition-colors group-focus-within:text-primary">
                     Password
                   </label>
-                  <Input 
-                    id="password" 
-                    type="password" 
-                    placeholder="••••••••" 
-                    value={password} 
-                    onChange={e => setPassword(e.target.value)} 
-                    className="h-14 bg-muted/30 border-2 border-border/50 rounded-xl text-base placeholder:text-muted-foreground/50 transition-all duration-300 focus:border-primary focus:bg-background" 
-                    disabled={isLoading} 
-                  />
+                  <div className="relative">
+                    <Input 
+                      id="password" 
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••" 
+                      value={password} 
+                      onChange={e => setPassword(e.target.value)} 
+                      className="h-14 bg-muted/30 border-2 border-border/50 rounded-xl text-base placeholder:text-muted-foreground/50 transition-all duration-300 focus:border-primary focus:bg-background pr-12" 
+                      disabled={isLoading} 
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                      disabled={isLoading}
+                    >
+                      {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                    </button>
+                  </div>
                 </div>
 
-                <div className="flex items-center justify-between pt-2">
-                  <div className="flex items-center space-x-3 group">
-                    <Checkbox 
-                      id="remember" 
-                      checked={rememberMe} 
-                      onCheckedChange={checked => setRememberMe(checked as boolean)} 
-                      disabled={isLoading} 
-                      className="border-2 border-muted-foreground/30 data-[state=checked]:bg-primary data-[state=checked]:border-primary transition-all" 
-                    />
-                    <label htmlFor="remember" className="text-sm text-muted-foreground cursor-pointer select-none group-hover:text-foreground transition-colors">
-                      Keep me signed in
-                    </label>
-                  </div>
+                <div className="flex items-center justify-end pt-2">
                   <button 
                     type="button" 
                     className="text-sm text-primary hover:text-primary-hover transition-all duration-200 font-medium relative after:absolute after:w-0 after:h-0.5 after:bottom-0 after:left-0 after:bg-primary after:transition-all after:duration-300 hover:after:w-full" 
@@ -140,28 +179,18 @@ const Login = () => {
 
           {/* Right Column - Gradient Image */}
           <div className="hidden md:block relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-primary "></div>
+            <div className="absolute inset-0 bg-gradient-to-br from-primary"></div>
             <img 
               src={loginGradient} 
               alt="Abstract gradient background" 
               className="absolute inset-0 w-full h-full object-cover scale-110 opacity-120"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-card/50 via-transparent to-transparent"></div>
-            
-            {/* Decorative elements */}
-            <div className="absolute bottom-12 left-12 right-12 z-10">
-              <div className="backdrop-blur-md bg-card/10 rounded-2xl p-8 border border-primary-foreground/10">
-                <h3 className="text-2xl font-bold text-primary-foreground mb-3">
-                  Streamline Your Operations
-                </h3>
-                <p className="text-primary-foreground/80 text-sm leading-relaxed">
-                  Powerful queue management tools designed for efficiency and control. Monitor, manage, and optimize your workflow from one unified dashboard.
-                </p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-    </div>;
+    </div>
+  );
 };
+
 export default Login;
