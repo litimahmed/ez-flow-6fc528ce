@@ -1,11 +1,14 @@
 import { LoginPayload, LoginResponse } from "@/types/auth";
+import { AboutNousPayload, AboutNousResponse } from "@/types/aboutUs";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api/auth/Admin";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
+const AUTH_URL = `${API_BASE_URL}/auth/Admin`;
+const ADMINS_URL = `${API_BASE_URL}/admins`;
 
 export const loginAdmin = async (
   payload: LoginPayload
 ): Promise<LoginResponse> => {
-  const response = await fetch(`${API_BASE_URL}/loginAdmin/`, {
+  const response = await fetch(`${AUTH_URL}/loginAdmin/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -22,7 +25,7 @@ export const loginAdmin = async (
 };
 
 export const logoutAdmin = async (refreshToken?: string): Promise<void> => {
-  const response = await fetch(`${API_BASE_URL}/logoutAdmin/`, {
+  const response = await fetch(`${AUTH_URL}/logoutAdmin/`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -35,4 +38,26 @@ export const logoutAdmin = async (refreshToken?: string): Promise<void> => {
     const errorData = await response.json().catch(() => ({}));
     throw new Error(errorData.message || "Logout failed.");
   }
+};
+
+// About Us API
+export const createAboutNous = async (
+  payload: AboutNousPayload
+): Promise<AboutNousResponse> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/AboutNous/ajouter/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to create About Us content.");
+  }
+
+  return response.json();
 };

@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Manage from "./pages/Manage";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
+import AboutUs from "./pages/AboutUs";
 import NotFound from "./pages/NotFound";
 import { DashboardLayout } from "./components/DashboardLayout";
 
@@ -25,6 +26,7 @@ const App = () => (
           <Route path="/manage" element={<DashboardLayout><Manage /></DashboardLayout>} />
           <Route path="/analytics" element={<DashboardLayout><Analytics /></DashboardLayout>} />
           <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
+          <Route path="/content/about-us" element={<DashboardLayout><AboutUs /></DashboardLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
