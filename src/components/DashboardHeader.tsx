@@ -1,4 +1,4 @@
-import { Bell, Menu, Search, HelpCircle, Settings, LogOut, User, Shield } from "lucide-react";
+import { Bell, Menu, Search, HelpCircle, Settings, LogOut, User, Shield, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { Input } from "@/components/ui/input";
@@ -12,13 +12,13 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { useNavigate } from "react-router-dom";
+import { useLogout } from "@/hooks/useLogout";
 
 export function DashboardHeader() {
-  const navigate = useNavigate();
+  const { logout, isLoading: isLoggingOut } = useLogout();
 
   const handleLogout = () => {
-    navigate("/login");
+    logout();
   };
 
   return (
@@ -117,9 +117,9 @@ export function DashboardHeader() {
               <span className="font-medium">Settings</span>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={handleLogout} className="py-2.5 cursor-pointer text-destructive focus:text-destructive">
-              <LogOut className="mr-3 h-4 w-4" />
-              <span className="font-medium">Log out</span>
+            <DropdownMenuItem onClick={handleLogout} disabled={isLoggingOut} className="py-2.5 cursor-pointer text-destructive focus:text-destructive">
+              {isLoggingOut ? <Loader2 className="mr-3 h-4 w-4 animate-spin" /> : <LogOut className="mr-3 h-4 w-4" />}
+              <span className="font-medium">{isLoggingOut ? "Logging out..." : "Log out"}</span>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

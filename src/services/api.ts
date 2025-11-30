@@ -14,10 +14,25 @@ export const loginAdmin = async (
   });
 
   if (!response.ok) {
-    // You can handle different error status codes here
     const errorData = await response.json();
     throw new Error(errorData.message || "An unknown error occurred.");
   }
 
   return response.json();
+};
+
+export const logoutAdmin = async (refreshToken?: string): Promise<void> => {
+  const response = await fetch(`${API_BASE_URL}/logoutAdmin/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(refreshToken && { "Authorization": `Bearer ${refreshToken}` }),
+    },
+    body: JSON.stringify({ refresh: refreshToken }),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Logout failed.");
+  }
 };

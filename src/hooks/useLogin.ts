@@ -15,8 +15,10 @@ export const useLogin = () => {
     setError(null);
     try {
       const data = await loginAdmin(payload);
-      // Here you would typically save the access/refresh tokens
-      // e.g., localStorage.setItem('accessToken', data.access);
+      // Store access and refresh tokens
+      localStorage.setItem("accessToken", data.access);
+      localStorage.setItem("refreshToken", data.refresh);
+      
       toast({ title: "Success", description: "Welcome back!", variant: "success" });
       navigate("/");
     } catch (err) {
