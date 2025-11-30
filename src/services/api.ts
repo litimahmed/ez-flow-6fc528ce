@@ -64,6 +64,25 @@ export const createAboutNous = async (
 };
 
 // Contact API
+export const getAllContacts = async (): Promise<ContactResponse[]> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/contacte/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to fetch contacts.");
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [data];
+};
+
 export const getContact = async (): Promise<ContactResponse> => {
   const accessToken = localStorage.getItem("accessToken");
   const response = await fetch(`${ADMINS_URL}/contacte/`, {
