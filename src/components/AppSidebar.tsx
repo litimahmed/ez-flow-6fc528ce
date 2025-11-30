@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, Users, Settings, BarChart3, Zap, FileText, ChevronDown, Info, Mail, Phone } from "lucide-react";
+import { LayoutDashboard, Users, Settings, BarChart3, Zap, FileText, ChevronDown, Info, Mail, Phone, Handshake } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar } from "@/components/ui/sidebar";
@@ -26,6 +26,15 @@ const contentItems = [
     items: [
       { title: "View Contact", url: "/content/contact" },
       { title: "All Contacts", url: "/content/contact/all" },
+    ]
+  },
+  { 
+    title: "Partners", 
+    url: "/content/partners", 
+    icon: Handshake,
+    items: [
+      { title: "View Partners", url: "/content/partners" },
+      { title: "All Partners", url: "/content/partners/all" },
     ]
   },
 ];
