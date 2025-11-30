@@ -1,6 +1,7 @@
 import { LoginPayload, LoginResponse } from "@/types/auth";
 import { AboutNousPayload, AboutNousResponse } from "@/types/aboutUs";
 import { ContactPayload, ContactResponse } from "@/types/contact";
+import { PartnerPayload, PartnerResponse } from "@/types/partner";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000/api";
 const AUTH_URL = `${API_BASE_URL}/auth/Admin`;
@@ -141,4 +142,101 @@ export const updateContact = async (
   }
 
   return response.json();
+};
+
+// Partner API
+export const getAllPartners = async (): Promise<PartnerResponse[]> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/partenaire/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to fetch partners.");
+  }
+
+  const data = await response.json();
+  return Array.isArray(data) ? data : [data];
+};
+
+export const getPartner = async (partnerId: number): Promise<PartnerResponse> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/partenaire/${partnerId}/`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to fetch partner information.");
+  }
+
+  return response.json();
+};
+
+export const createPartner = async (
+  payload: PartnerPayload
+): Promise<PartnerResponse> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/partenaire/ajouter/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to create partner.");
+  }
+
+  return response.json();
+};
+
+export const updatePartner = async (
+  partnerId: number,
+  payload: PartnerPayload
+): Promise<PartnerResponse> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/partenaire/modifier/${partnerId}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to update partner.");
+  }
+
+  return response.json();
+};
+
+export const deletePartner = async (partnerId: number): Promise<void> => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await fetch(`${ADMINS_URL}/partenaire/supprimer/${partnerId}/`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      ...(accessToken && { "Authorization": `Bearer ${accessToken}` }),
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || "Failed to delete partner.");
+  }
 };
