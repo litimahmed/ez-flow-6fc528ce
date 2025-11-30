@@ -105,7 +105,7 @@ const Login = () => {
                     placeholder="admin@toorrii.com" 
                     value={email} 
                     onChange={e => setEmail(e.target.value)} 
-                    className="h-14 bg-muted/30 border-2 border-border/50 rounded-xl text-base placeholder:text-muted-foreground/50 transition-all duration-300 focus:border-primary focus:bg-background" 
+                    className="h-14 bg-muted/30 border-2 border-border/50 rounded-xl text-base placeholder:text-muted-foreground/50 transition-all duration-300 focus:border-primary focus:bg-background focus-visible:ring-0 focus-visible:ring-offset-0" 
                     disabled={isLoading} 
                   />
                 </div>
@@ -121,7 +121,7 @@ const Login = () => {
                       placeholder="••••••••" 
                       value={password} 
                       onChange={e => setPassword(e.target.value)} 
-                      className="h-14 bg-muted/30 border-2 border-border/50 rounded-xl text-base placeholder:text-muted-foreground/50 transition-all duration-300 focus:border-primary focus:bg-background pr-12" 
+                      className="h-14 bg-muted/30 border-2 border-border/50 rounded-xl text-base placeholder:text-muted-foreground/50 transition-all duration-300 focus:border-primary focus:bg-background pr-12 focus-visible:ring-0 focus-visible:ring-offset-0" 
                       disabled={isLoading} 
                     />
                     <button
