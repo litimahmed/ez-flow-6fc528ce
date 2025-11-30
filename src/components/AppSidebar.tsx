@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, Users, Settings, BarChart3, Zap, FileText, ChevronDown, Info } from "lucide-react";
+import { LayoutDashboard, Users, Settings, BarChart3, Zap, FileText, ChevronDown, Info, Mail } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar } from "@/components/ui/sidebar";
@@ -15,6 +15,7 @@ const mainItems = [
 
 const contentItems = [
   { title: "About Us", url: "/content/about-us", icon: Info },
+  { title: "Contact", url: "/content/contact", icon: Mail },
 ];
 
 export function AppSidebar() {
