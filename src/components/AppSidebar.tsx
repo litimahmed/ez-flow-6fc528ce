@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { LayoutDashboard, Users, Settings, BarChart3, Zap, FileText, ChevronDown, Info, Mail } from "lucide-react";
+import { LayoutDashboard, Users, Settings, BarChart3, Zap, FileText, ChevronDown, Info, Mail, Phone } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarFooter, useSidebar } from "@/components/ui/sidebar";
@@ -14,8 +14,20 @@ const mainItems = [
 ];
 
 const contentItems = [
-  { title: "About Us", url: "/content/about-us", icon: Info },
-  { title: "Contact", url: "/content/contact", icon: Mail },
+  { 
+    title: "About Us", 
+    url: "/content/about-us", 
+    icon: Info 
+  },
+  { 
+    title: "Contact", 
+    url: "/content/contact", 
+    icon: Phone,
+    items: [
+      { title: "View Contact", url: "/content/contact" },
+      { title: "All Contacts", url: "/content/contact/all" },
+    ]
+  },
 ];
 
 export function AppSidebar() {
@@ -129,6 +141,40 @@ export function AppSidebar() {
                   </CollapsibleTrigger>
                   <CollapsibleContent className="pl-4 mt-1 space-y-1">
                     {contentItems.map(item => {
+                      if (item.items) {
+                        // Item with sub-items
+                        return (
+                          <div key={item.title} className="space-y-1">
+                            {item.items.map(subItem => {
+                              const active = isActive(subItem.url);
+                              return (
+                                <SidebarMenuItem key={subItem.title}>
+                                  <SidebarMenuButton asChild>
+                                    <NavLink
+                                      to={subItem.url}
+                                      className={`
+                                        px-4 py-2.5 rounded-lg transition-all duration-200
+                                        text-muted-foreground hover:text-foreground
+                                        hover:bg-muted/50
+                                        flex items-center gap-3
+                                        text-sm
+                                      `}
+                                      activeClassName={`
+                                        bg-primary/10 text-primary font-medium
+                                      `}
+                                    >
+                                      <item.icon className={`h-4 w-4 ${active ? "text-primary" : ""}`} />
+                                      <span>{subItem.title}</span>
+                                    </NavLink>
+                                  </SidebarMenuButton>
+                                </SidebarMenuItem>
+                              );
+                            })}
+                          </div>
+                        );
+                      }
+                      
+                      // Regular item without sub-items
                       const active = isActive(item.url);
                       return (
                         <SidebarMenuItem key={item.title}>
