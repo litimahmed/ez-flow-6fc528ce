@@ -1,11 +1,12 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/hooks/use-toast";
-import { getContact, createContact, updateContact } from "@/services/api";
+import { getContact, updateContact } from "@/services/api";
 import type { ContactPayload } from "@/types/contact";
 import { 
   MapPin, 
@@ -19,14 +20,15 @@ import {
   Linkedin,
   MessageSquare,
   Save,
-  Loader2
+  Loader2,
+  ArrowLeft
 } from "lucide-react";
 
-export default function Contact() {
+export default function ContactEdit() {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [fetching, setFetching] = useState(true);
-  const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState<ContactPayload>({
     nom: "",
     email: "",
@@ -53,10 +55,13 @@ export default function Contact() {
       setFetching(true);
       const data = await getContact();
       setFormData(data);
-      setIsEditMode(true);
     } catch (error) {
-      console.error("No existing contact data found");
-      setIsEditMode(false);
+      toast({
+        title: "Error",
+        description: "Failed to load contact information",
+        variant: "destructive",
+      });
+      navigate("/content/contact");
     } finally {
       setFetching(false);
     }
@@ -67,24 +72,16 @@ export default function Contact() {
     setLoading(true);
 
     try {
-      if (isEditMode) {
-        await updateContact(formData);
-        toast({
-          title: "Success",
-          description: "Contact information updated successfully",
-        });
-      } else {
-        await createContact(formData);
-        toast({
-          title: "Success",
-          description: "Contact information created successfully",
-        });
-        setIsEditMode(true);
-      }
+      await updateContact(formData);
+      toast({
+        title: "Success",
+        description: "Contact information updated successfully",
+      });
+      navigate("/content/contact");
     } catch (error) {
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to save contact information",
+        description: error instanceof Error ? error.message : "Failed to update contact information",
         variant: "destructive",
       });
     } finally {
@@ -109,12 +106,17 @@ export default function Contact() {
 
   return (
     <div className="space-y-6 max-w-6xl mx-auto">
-      <div className="flex items-center justify-between">
+      <div className="flex items-center gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate("/content/contact")}
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
         <div>
-          <h2 className="text-3xl font-bold tracking-tight">Contact Management</h2>
-          <p className="text-muted-foreground">
-            {isEditMode ? "Update contact information" : "Create contact information"}
-          </p>
+          <h2 className="text-3xl font-bold tracking-tight">Edit Contact Information</h2>
+          <p className="text-muted-foreground">Update your company's contact details</p>
         </div>
       </div>
 
@@ -358,13 +360,16 @@ export default function Contact() {
         </Card>
 
         <div className="flex justify-end gap-4">
+          <Button type="button" variant="outline" onClick={() => navigate("/content/contact")}>
+            Cancel
+          </Button>
           <Button type="submit" disabled={loading} size="lg" className="gap-2">
             {loading ? (
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : (
               <Save className="h-4 w-4" />
             )}
-            {isEditMode ? "Update Contact" : "Create Contact"}
+            Update Contact
           </Button>
         </div>
       </form>

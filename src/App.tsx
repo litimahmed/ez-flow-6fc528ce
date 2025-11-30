@@ -9,7 +9,9 @@ import Manage from "./pages/Manage";
 import Analytics from "./pages/Analytics";
 import Settings from "./pages/Settings";
 import AboutUs from "./pages/AboutUs";
-import Contact from "./pages/Contact";
+import ContactList from "./pages/ContactList";
+import ContactCreate from "./pages/ContactCreate";
+import ContactEdit from "./pages/ContactEdit";
 import NotFound from "./pages/NotFound";
 import { DashboardLayout } from "./components/DashboardLayout";
 
@@ -28,7 +30,9 @@ const App = () => (
           <Route path="/analytics" element={<DashboardLayout><Analytics /></DashboardLayout>} />
           <Route path="/settings" element={<DashboardLayout><Settings /></DashboardLayout>} />
           <Route path="/content/about-us" element={<DashboardLayout><AboutUs /></DashboardLayout>} />
-          <Route path="/content/contact" element={<DashboardLayout><Contact /></DashboardLayout>} />
+          <Route path="/content/contact" element={<DashboardLayout><ContactList /></DashboardLayout>} />
+          <Route path="/content/contact/create" element={<DashboardLayout><ContactCreate /></DashboardLayout>} />
+          <Route path="/content/contact/edit" element={<DashboardLayout><ContactEdit /></DashboardLayout>} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
